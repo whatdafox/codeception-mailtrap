@@ -1,0 +1,22 @@
+{
+    "name": "whatdafox/codeception-mailtrap-module",
+    "description": "Mailtrap module for Codeception",
+    "keywords": ["Codeception", "Mailtrap"],
+    "type":"library",
+    "authors": [
+        {
+            "name": "Valentin Prugnaud",
+            "email": "valentin@whatdafox.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "codeception/codeception": "*",
+        "guzzle/guzzle": "~3.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Codeception\\Module\\": "src"
+        }
+    }
+}
