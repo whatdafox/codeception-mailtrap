@@ -83,12 +83,12 @@ class Mailtrap extends Module
     }
 
     /**
-     * Clean all the messages from inbox
-     * @return void
+     * Clean the inbox after each scenario
+     * @param TestCase $test
      */
-    public function cleanInbox()
+    public function _after( TestCase $test )
     {
-        $this->client->patch("inboxes/{$this->config['inbox_id']}/clean")->send();
+        $this->cleanInbox();
     }
 
     /**
@@ -229,4 +229,12 @@ class Mailtrap extends Module
         return array_shift( $this->fetchMessages() );
     }
 
+    /**
+     * Clean all the messages from inbox
+     * @return void
+     */
+    protected function cleanInbox()
+    {
+        $this->client->patch( "inboxes/{$this->config['inbox_id']}/clean" )->send();
+    }
 }
