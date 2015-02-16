@@ -25,14 +25,14 @@ use Guzzle\Http\Client;
  *
  * ## API
  *
- * * client - `\GuzzleHttp\Client` Guzzle client for API requests
+ * * client - `\Guzzle\Http\Client` Guzzle client for API requests
  *
  */
 class Mailtrap extends Module
 {
 
     /**
-     * @var \GuzzleHttp\Client
+     * @var \Guzzle\Http\Client
      */
     protected $client;
 
@@ -84,9 +84,9 @@ class Mailtrap extends Module
 
     /**
      * Clean the inbox after each scenario
-     * @param TestCase $test
+     * @param \Codeception\TestCase $test
      */
-    public function _after( TestCase $test )
+    public function _after( \Codeception\TestCase $test )
     {
         $this->cleanInbox();
     }
