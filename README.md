@@ -6,24 +6,22 @@ This package provides a Mailtrap module for Codeception.
 
 You need to add the repository into your composer.json file
 
-```bash
- "repositories": [
-    {
-     ....
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/WhatDaFox/Codeception-Mailtrap"
-    }
+```json
+ "require-dev": {
+  	"whatdafox/codeception-mailtrap":"~1.0"
+ }
 ```
-You can install this package through composer:
+Then run a composer update:
+
 ```bash
-composer require whatdafox/codeception-mailtrap
+composer update
 ```
 
 ## Usage
+
 You can use this module as any other Codeception module, by adding 'Mailtrap' to the enabled modules in your Codeception suite configurations.
-You must setup the configuration variables: `client_id` and `inbox`. 
+
+*You must setup the configuration variables: `client_id` and `inbox`.*
 
 Example of functional.suite.yml
 
