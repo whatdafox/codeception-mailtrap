@@ -1,7 +1,7 @@
 <?php namespace Codeception\Module;
 
 use Codeception\Module;
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 
 /**
  * This module allows you to test emails using Mailtrap <https://mailtrap.io>.
@@ -32,7 +32,7 @@ class Mailtrap extends Module
 {
 
     /**
-     * @var \Guzzle\Http\Client
+     * @var \GuzzleHttp\Client
      */
     protected $client;
 
@@ -205,28 +205,13 @@ class Mailtrap extends Module
     }
 
     /**
-     * Get all messages of the default inbox
-     * @return array
-     */
-    protected function fetchMessages()
-    {
-        $messages = $this->client->get( "inboxes/{$this->config['inbox_id']}/messages" )->json();
-
-        if( empty( $messages ) )
-        {
-            $this->fail( "No messages received" );
-        }
-
-        return $messages;
-    }
-
-    /**
      * Get the most recent message of the default inbox
      * @return array
      */
     protected function fetchLastMessage()
     {
-        return array_shift( $this->fetchMessages() );
+        $messages = $this->client->get( "inboxes/{$this->config['inbox_id']}/messages" )->json();
+        return array_shift( $messages );
     }
 
     /**
@@ -235,6 +220,6 @@ class Mailtrap extends Module
      */
     protected function cleanInbox()
     {
-        $this->client->patch( "inboxes/{$this->config['inbox_id']}/clean" )->send();
+        $this->client->patch( "inboxes/{$this->config['inbox_id']}/clean" );
     }
 }
