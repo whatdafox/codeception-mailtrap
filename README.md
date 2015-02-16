@@ -13,12 +13,12 @@ You need to add the repository into your composer.json file
     },
     {
       "type": "vcs",
-      "url": "https://github.com/whatdafox/codeception-mailtrap"
+      "url": "https://github.com/WhatDaFox/Codeception-Mailtrap"
     }
 ```
 You can install this package through composer:
 ```bash
-composer require whatdafox/codeception-mailtrap-module
+composer require whatdafox/codeception-mailtrap
 ```
 
 ## Usage
