@@ -3,6 +3,7 @@
     "description": "Mailtrap module for Codeception",
     "keywords": ["Codeception", "Mailtrap"],
     "type":"library",
+    "license":"MIT",
     "authors": [
         {
             "name": "Valentin Prugnaud",
