@@ -13,7 +13,7 @@ You need to add the repository into your composer.json file
     },
     {
       "type": "vcs",
-      "url": "https://github.com/whatdafox/codeception-mailtrap-module"
+      "url": "https://github.com/whatdafox/codeception-mailtrap"
     }
 ```
 You can install this package through composer:

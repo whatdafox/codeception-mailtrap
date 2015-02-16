@@ -9,7 +9,7 @@ use Guzzle\Http\Client;
  *
  * ## Project repository
  *
- * <https://github.com/WhatDaFox/codeception-mailtrap-module>
+ * <https://github.com/WhatDaFox/codeception-mailtrap>
  *
  * ## Status
  *

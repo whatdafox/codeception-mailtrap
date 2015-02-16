@@ -1,5 +1,5 @@
 {
-    "name": "whatdafox/codeception-mailtrap-module",
+    "name": "whatdafox/codeception-mailtrap",
     "description": "Mailtrap module for Codeception",
     "keywords": ["Codeception", "Mailtrap"],
     "type":"library",
