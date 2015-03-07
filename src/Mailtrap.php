@@ -26,11 +26,9 @@ use GuzzleHttp\Client;
  * ## API
  *
  * * client - `\Guzzle\Http\Client` Guzzle client for API requests
- *
  */
 class Mailtrap extends Module
 {
-
     /**
      * @var \GuzzleHttp\Client
      */
@@ -52,16 +50,17 @@ class Mailtrap extends Module
     protected $requiredFields = [ 'client_id', 'inbox_id' ];
 
     /**
-     * Constructor
+     * Constructor.
+     *
      * @param null $config
      */
-    public function __construct( $config = NULL )
+    public function __construct($config = null)
     {
         $this->config = array_merge(
             [
                 'client_id' => '',
                 'inbox_id'  => '',
-                'version'   => 'v1'
+                'version'   => 'v1',
             ],
             (array) $config
         );
@@ -69,157 +68,181 @@ class Mailtrap extends Module
     }
 
     /**
-     * Initialize
+     * Initialize.
+     *
      * @return void
      */
     public function _initialize()
     {
-        $this->client = new Client( [
+        $this->client = new Client([
             'base_url' => [ $this->baseUrl, [ 'version' => $this->config['version'] ] ],
             'defaults' => [
-                'headers' => [ 'Api-Token' => $this->config['client_id'] ]
-            ]
-        ] );
+                'headers' => [ 'Api-Token' => $this->config['client_id'] ],
+            ],
+        ]);
     }
 
     /**
-     * Clean the inbox after each scenario
+     * Clean the inbox after each scenario.
+     *
      * @param \Codeception\TestCase $test
      */
-    public function _after( \Codeception\TestCase $test )
+    public function _after(\Codeception\TestCase $test)
     {
         $this->cleanInbox();
     }
 
     /**
-     * Check if the latest email received contains $params
+     * Check if the latest email received contains $params.
+     *
      * @param $params
+     *
      * @return mixed
      */
-    public function receiveAnEmail( $params )
+    public function receiveAnEmail($params)
     {
         $message = $this->fetchLastMessage();
-        foreach( $params as $param => $value )
-        {
-            $this->assertEquals( $value, $message[ $param ] );
+        foreach ($params as $param => $value) {
+            $this->assertEquals($value, $message[ $param ]);
         }
     }
 
     /**
-     * Check if the latest email received is from $senderEmail
+     * Check if the latest email received is from $senderEmail.
+     *
      * @param $senderEmail
+     *
      * @return mixed
      */
-    public function receiveAnEmailFromEmail( $senderEmail )
+    public function receiveAnEmailFromEmail($senderEmail)
     {
         $message = $this->fetchLastMessage();
-        $this->assertEquals( $senderEmail, $message['from_email'] );
+        $this->assertEquals($senderEmail, $message['from_email']);
     }
 
     /**
-     * Check if the latest email received is from $senderName
+     * Check if the latest email received is from $senderName.
+     *
      * @param $senderName
+     *
      * @return mixed
      */
-    public function receiveAnEmailFromName( $senderName )
+    public function receiveAnEmailFromName($senderName)
     {
         $message = $this->fetchLastMessage();
-        $this->assertEquals( $senderName, $message['from_name'] );
+        $this->assertEquals($senderName, $message['from_name']);
     }
 
     /**
-     * Check if the latest email was received by $recipientEmail
+     * Check if the latest email was received by $recipientEmail.
+     *
      * @param $recipientEmail
+     *
      * @return mixed
      */
-    public function receiveAnEmailToEmail( $recipientEmail )
+    public function receiveAnEmailToEmail($recipientEmail)
     {
         $message = $this->fetchLastMessage();
-        $this->assertEquals( $recipientEmail, $message['to_email'] );
+        $this->assertEquals($recipientEmail, $message['to_email']);
     }
 
     /**
-     * Check if the latest email was received by $recipientName
+     * Check if the latest email was received by $recipientName.
+     *
      * @param $recipientName
+     *
      * @return mixed
      */
-    public function receiveAnEmailToName( $recipientName )
+    public function receiveAnEmailToName($recipientName)
     {
         $message = $this->fetchLastMessage();
-        $this->assertEquals( $recipientName, $message['to_name'] );
+        $this->assertEquals($recipientName, $message['to_name']);
     }
 
     /**
-     * Check if the latest email received has the $subject
+     * Check if the latest email received has the $subject.
+     *
      * @param $subject
+     *
      * @return mixed
      */
-    public function receiveAnEmailWithSubject( $subject )
+    public function receiveAnEmailWithSubject($subject)
     {
         $message = $this->fetchLastMessage();
-        $this->assertEquals( $subject, $message['subject'] );
+        $this->assertEquals($subject, $message['subject']);
     }
 
     /**
-     * Check if the latest email received has the $textBody
+     * Check if the latest email received has the $textBody.
+     *
      * @param $textBody
+     *
      * @return mixed
      */
-    public function receiveAnEmailWithTextBody( $textBody )
+    public function receiveAnEmailWithTextBody($textBody)
     {
         $message = $this->fetchLastMessage();
-        $this->assertEquals( $textBody, $message['text_body'] );
+        $this->assertEquals($textBody, $message['text_body']);
     }
 
     /**
-     * Check if the latest email received has the $htmlBody
+     * Check if the latest email received has the $htmlBody.
+     *
      * @param $htmlBody
+     *
      * @return mixed
      */
-    public function receiveAnEmailWithHtmlBody( $htmlBody )
+    public function receiveAnEmailWithHtmlBody($htmlBody)
     {
         $message = $this->fetchLastMessage();
-        $this->assertEquals( $htmlBody, $message['html_body'] );
+        $this->assertEquals($htmlBody, $message['html_body']);
     }
 
     /**
-     * Look for a string in the most recent email (Text)
+     * Look for a string in the most recent email (Text).
+     *
      * @param $expected
+     *
      * @return mixed
      */
-    public function seeInEmailTextBody( $expected )
+    public function seeInEmailTextBody($expected)
     {
         $email = $this->fetchLastMessage();
-        $this->assertContains( $expected, $email['text_body'], "Email body contains text" );
+        $this->assertContains($expected, $email['text_body'], "Email body contains text");
     }
 
     /**
-     * Look for a string in the most recent email (HTML)
+     * Look for a string in the most recent email (HTML).
+     *
      * @param $expected
+     *
      * @return mixed
      */
-    public function seeInEmailHtmlBody( $expected )
+    public function seeInEmailHtmlBody($expected)
     {
         $email = $this->fetchLastMessage();
-        $this->assertContains( $expected, $email['html_body'], "Email body contains HTML" );
+        $this->assertContains($expected, $email['html_body'], "Email body contains HTML");
     }
 
     /**
-     * Get the most recent message of the default inbox
+     * Get the most recent message of the default inbox.
+     *
      * @return array
      */
     protected function fetchLastMessage()
     {
-        $messages = $this->client->get( "inboxes/{$this->config['inbox_id']}/messages" )->json();
-        return array_shift( $messages );
+        $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")->json();
+
+        return array_shift($messages);
     }
 
     /**
-     * Clean all the messages from inbox
+     * Clean all the messages from inbox.
+     *
      * @return void
      */
     protected function cleanInbox()
     {
-        $this->client->patch( "inboxes/{$this->config['inbox_id']}/clean" );
+        $this->client->patch("inboxes/{$this->config['inbox_id']}/clean");
     }
 }
