@@ -1,3 +1,6 @@
+[![Latest Stable Version](https://poser.pugx.org/whatdafox/codeception-mailtrap/v/stable.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap) [![Total Downloads](https://poser.pugx.org/whatdafox/codeception-mailtrap/downloads.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap) [![Latest Unstable Version](https://poser.pugx.org/whatdafox/codeception-mailtrap/v/unstable.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap) [![License](https://poser.pugx.org/whatdafox/codeception-mailtrap/license.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap)
+[![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/foxted)
+
 # Codeception Mailtrap Module
 
 This package provides a Mailtrap module for Codeception. 
