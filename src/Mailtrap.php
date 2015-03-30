@@ -42,30 +42,12 @@ class Mailtrap extends Module
     /**
      * @var array
      */
-    protected $config = [ 'client_id', 'inbox_id', 'version' ];
+    protected $config = [ 'client_id' => NULL, 'inbox_id' => NULL, 'version' => 'v1' ];
 
     /**
      * @var array
      */
     protected $requiredFields = [ 'client_id', 'inbox_id' ];
-
-    /**
-     * Constructor.
-     *
-     * @param null $config
-     */
-    public function __construct($config = null)
-    {
-        $this->config = array_merge(
-            [
-                'client_id' => '',
-                'inbox_id'  => '',
-                'version'   => 'v1',
-            ],
-            (array) $config
-        );
-        parent::__construct();
-    }
 
     /**
      * Initialize.
