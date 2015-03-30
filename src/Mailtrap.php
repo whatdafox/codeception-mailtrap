@@ -42,7 +42,7 @@ class Mailtrap extends Module
     /**
      * @var array
      */
-    protected $config = ['client_id' => NULL, 'inbox_id' => NULL, 'version' => 'v1'];
+    protected $config = ['client_id' => null, 'inbox_id' => null, 'version' => 'v1'];
 
     /**
      * @var array
