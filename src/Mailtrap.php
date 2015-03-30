@@ -42,12 +42,12 @@ class Mailtrap extends Module
     /**
      * @var array
      */
-    protected $config = [ 'client_id' => NULL, 'inbox_id' => NULL, 'version' => 'v1' ];
+    protected $config = ['client_id' => NULL, 'inbox_id' => NULL, 'version' => 'v1'];
 
     /**
      * @var array
      */
-    protected $requiredFields = [ 'client_id', 'inbox_id' ];
+    protected $requiredFields = ['client_id', 'inbox_id'];
 
     /**
      * Initialize.
@@ -57,9 +57,9 @@ class Mailtrap extends Module
     public function _initialize()
     {
         $this->client = new Client([
-            'base_url' => [ $this->baseUrl, [ 'version' => $this->config['version'] ] ],
+            'base_url' => [$this->baseUrl, ['version' => $this->config['version']]],
             'defaults' => [
-                'headers' => [ 'Api-Token' => $this->config['client_id'] ],
+                'headers' => ['Api-Token' => $this->config['client_id']],
             ],
         ]);
     }
@@ -85,7 +85,7 @@ class Mailtrap extends Module
     {
         $message = $this->fetchLastMessage();
         foreach ($params as $param => $value) {
-            $this->assertEquals($value, $message[ $param ]);
+            $this->assertEquals($value, $message[$param]);
         }
     }
 
