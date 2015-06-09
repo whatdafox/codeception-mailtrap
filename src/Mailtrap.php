@@ -223,7 +223,7 @@ class Mailtrap extends Module
      *
      * @return void
      */
-    protected function cleanInbox()
+    public function cleanInbox()
     {
         $this->client->patch("inboxes/{$this->config['inbox_id']}/clean");
     }
