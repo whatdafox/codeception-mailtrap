@@ -1,4 +1,6 @@
-<?php namespace Codeception\Module;
+<?php
+
+namespace Codeception\Module;
 
 use Codeception\Module;
 use Guzzle\Http\Client;
@@ -190,7 +192,7 @@ class Mailtrap extends Module
     public function seeInEmailTextBody($expected)
     {
         $email = $this->fetchLastMessage();
-        $this->assertContains($expected, $email['text_body'], "Email body contains text");
+        $this->assertContains($expected, $email['text_body'], 'Email body contains text');
     }
 
     /**
@@ -203,7 +205,7 @@ class Mailtrap extends Module
     public function seeInEmailHtmlBody($expected)
     {
         $email = $this->fetchLastMessage();
-        $this->assertContains($expected, $email['html_body'], "Email body contains HTML");
+        $this->assertContains($expected, $email['html_body'], 'Email body contains HTML');
     }
 
     /**
