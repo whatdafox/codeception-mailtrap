@@ -41,6 +41,6 @@ modules:
  ```     
 
   You can find the token on the page https://mailtrap.io/public_api
-  THe inbox name is on the home page.
+  The inbox name is on the home page.
   
-  After that you can run a build for codeception to index your files properly and you're good to go.
+  After that you can run a build for Codeception to index your files properly and you're good to go.
