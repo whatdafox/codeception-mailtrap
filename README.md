@@ -1,4 +1,7 @@
-[![Latest Stable Version](https://poser.pugx.org/whatdafox/codeception-mailtrap/v/stable.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap) [![Total Downloads](https://poser.pugx.org/whatdafox/codeception-mailtrap/downloads.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap) [![Latest Unstable Version](https://poser.pugx.org/whatdafox/codeception-mailtrap/v/unstable.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap) [![License](https://poser.pugx.org/whatdafox/codeception-mailtrap/license.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap)
+[![Latest Stable Version](https://img.shields.io/packagist/v/whatdafox/codeception-module.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap) 
+[![Total Downloads](https://img.shields.io/packagist/dt/whatdafox/codeception-mailtrap.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap) 
+[![Latest Unstable Version](https://poser.pugx.org/whatdafox/codeception-mailtrap/v/unstable.svg)](https://img.shields.io/packagist/vpre/whatdafox/codeception-mailtrap.svg) 
+[![License](https://img.shields.io/packagist/l/whatdafox/codeception-mailtrap.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap)
 [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/foxted)
 
 # Codeception Mailtrap Module
