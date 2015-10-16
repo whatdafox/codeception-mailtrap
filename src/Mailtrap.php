@@ -211,7 +211,7 @@ class Mailtrap extends Module
      *
      * @return array
      */
-    protected function fetchLastMessage()
+    public function fetchLastMessage()
     {
         $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")
                                  ->send()
