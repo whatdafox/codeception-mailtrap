@@ -1,4 +1,4 @@
-[![Latest Stable Version](https://img.shields.io/packagist/v/whatdafox/codeception-module.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap) 
+[![Latest Stable Version](https://img.shields.io/packagist/v/whatdafox/codeception-mailtrap.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap) 
 [![Total Downloads](https://img.shields.io/packagist/dt/whatdafox/codeception-mailtrap.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap) 
 [![Latest Unstable Version](https://poser.pugx.org/whatdafox/codeception-mailtrap/v/unstable.svg)](https://img.shields.io/packagist/vpre/whatdafox/codeception-mailtrap.svg) 
 [![License](https://img.shields.io/packagist/l/whatdafox/codeception-mailtrap.svg)](https://packagist.org/packages/whatdafox/codeception-mailtrap)
