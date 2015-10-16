@@ -75,6 +75,17 @@ class Mailtrap extends Module
     }
 
     /**
+     * Clean all the messages from inbox.
+     *
+     * @return void
+     */
+    public function cleanInbox()
+    {
+        $this->client->patch("inboxes/{$this->config['inbox_id']}/clean")
+            ->send();
+    }
+
+    /**
      * Check if the latest email received contains $params.
      *
      * @param $params
@@ -87,6 +98,20 @@ class Mailtrap extends Module
         foreach ($params as $param => $value) {
             $this->assertEquals($value, $message[$param]);
         }
+    }
+
+    /**
+     * Get the most recent message of the default inbox.
+     *
+     * @return array
+     */
+    public function fetchLastMessage()
+    {
+        $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")
+            ->send()
+            ->json();
+
+        return array_shift($messages);
     }
 
     /**
@@ -204,30 +229,5 @@ class Mailtrap extends Module
     {
         $email = $this->fetchLastMessage();
         $this->assertContains($expected, $email['html_body'], "Email body contains HTML");
-    }
-
-    /**
-     * Get the most recent message of the default inbox.
-     *
-     * @return array
-     */
-    public function fetchLastMessage()
-    {
-        $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")
-                                 ->send()
-                                 ->json();
-
-        return array_shift($messages);
-    }
-
-    /**
-     * Clean all the messages from inbox.
-     *
-     * @return void
-     */
-    public function cleanInbox()
-    {
-        $this->client->patch("inboxes/{$this->config['inbox_id']}/clean")
-                     ->send();
     }
 }
