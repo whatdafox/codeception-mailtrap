@@ -64,7 +64,6 @@ class Mailtrap extends Module
                 'headers' => ['Api-Token' => $this->config['client_id']],
             ],
         ]);
-        
         /* If you are using Guzzle ~6.0, use this format */
         /* $this->client = new Client([
                 'base_uri'        => $this->baseUrl,
@@ -231,9 +230,7 @@ class Mailtrap extends Module
                                  ->json();
 
         return array_shift($messages);
-        
         /* For Guzzle ~6.0 */
-        
         /* $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")->getBody();
            return $messages; */
     }
