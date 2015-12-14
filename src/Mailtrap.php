@@ -59,7 +59,7 @@ class Mailtrap extends Module
     {
         $this->client = new Client([
             'base_uri' => $this->baseUrl,
-            'headers' => [
+            'headers'  => [
                 'Api-Token' => $this->config['client_id'],
             ],
         ]);
