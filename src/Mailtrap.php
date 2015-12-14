@@ -3,7 +3,7 @@
 namespace Codeception\Module;
 
 use Codeception\Module;
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 
 /**
  * This module allows you to test emails using Mailtrap <https://mailtrap.io>.
@@ -11,7 +11,7 @@ use Guzzle\Http\Client;
  *
  * ## Project repository
  *
- * <https://github.com/WhatDaFox/codeception-mailtrap>
+ * <https://github.com/WhatDaFox/Codeception-Mailtrap>
  *
  * ## Status
  *
@@ -23,11 +23,10 @@ use Guzzle\Http\Client;
  *
  * * client_id: `string`, default `` - Your mailtrap API key.
  * * inbox_id: `string`, default `` - The inbox ID to use for the tests
- * * version: `string`, default `v1` - Version of the API to use, default to v1. (For future use)
  *
  * ## API
  *
- * * client - `\Guzzle\Http\Client` Guzzle client for API requests
+ * * client - `GuzzleHttp\Client` Guzzle client for API requests
  */
 class Mailtrap extends Module
 {
@@ -39,12 +38,12 @@ class Mailtrap extends Module
     /**
      * @var string
      */
-    protected $baseUrl = 'https://mailtrap.io/api/{version}/';
+    protected $baseUrl = 'https://mailtrap.io/api/v1/';
 
     /**
      * @var array
      */
-    protected $config = ['client_id' => null, 'inbox_id' => null, 'version' => 'v1'];
+    protected $config = ['client_id' => null, 'inbox_id' => null];
 
     /**
      * @var array
@@ -58,22 +57,12 @@ class Mailtrap extends Module
      */
     public function _initialize()
     {
-        $this->client = new Client($this->baseUrl, [
-            'version'         => $this->config['version'],
-            'request.options' => [
-                'headers' => ['Api-Token' => $this->config['client_id']],
+        $this->client = new Client([
+            'base_uri' => $this->baseUrl,
+            'headers' => [
+                'Api-Token' => $this->config['client_id'],
             ],
         ]);
-        /* If you are using Guzzle ~6.0, use this format */
-        /* $this->client = new Client([
-                'base_uri'        => $this->baseUrl,
-                'version'         => $this->config['version'],
-                'headers' => [
-                    'Api-Token' => $this->config['client_id'],
-                ],
-                
-            ]);
-        */
     }
 
     /**
@@ -87,6 +76,16 @@ class Mailtrap extends Module
     }
 
     /**
+     * Clean all the messages from inbox.
+     *
+     * @return void
+     */
+    public function cleanInbox()
+    {
+        $this->client->patch("inboxes/{$this->config['inbox_id']}/clean");
+    }
+
+    /**
      * Check if the latest email received contains $params.
      *
      * @param $params
@@ -96,9 +95,23 @@ class Mailtrap extends Module
     public function receiveAnEmail($params)
     {
         $message = $this->fetchLastMessage();
+
         foreach ($params as $param => $value) {
             $this->assertEquals($value, $message[$param]);
         }
+    }
+
+    /**
+     * Get the most recent message of the default inbox.
+     *
+     * @return array
+     */
+    public function fetchLastMessage()
+    {
+        $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")->getBody();
+        $messages = json_decode($messages, true);
+
+        return array_shift($messages);
     }
 
     /**
@@ -216,36 +229,5 @@ class Mailtrap extends Module
     {
         $email = $this->fetchLastMessage();
         $this->assertContains($expected, $email['html_body'], 'Email body contains HTML');
-    }
-
-    /**
-     * Get the most recent message of the default inbox.
-     *
-     * @return array
-     */
-    public function fetchLastMessage()
-    {
-        $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")
-                                 ->send()
-                                 ->json();
-
-        return array_shift($messages);
-        /* For Guzzle ~6.0 */
-        /* $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")->getBody();
-           return $messages; */
-    }
-
-    /**
-     * Clean all the messages from inbox.
-     *
-     * @return void
-     */
-    public function cleanInbox()
-    {
-        $this->client->patch("inboxes/{$this->config['inbox_id']}/clean")
-                     ->send();
-                     
-        /* For Guzzle ~6.0: */
-        /* $this->client->patch("inboxes/{$this->config['inbox_id']}/clean"); */
     }
 }
