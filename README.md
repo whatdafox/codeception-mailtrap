@@ -20,23 +20,31 @@ You need to add the repository into your composer.json file
 
 You can use this module as any other Codeception module, by adding 'Mailtrap' to the enabled modules in your Codeception suite configurations.
 
-*You must setup the configuration variables: `client_id` and `inbox_id`.*
-
-Example of functional.suite.yml
+### Add Mailtrap to your list of modules
 
 ```yml
-class_name: FunctionalTester
 modules:
-    enabled: [Filesystem, FunctionalHelper, Laravel5, Db, Mailtrap]
+    enabled: [Filesystem, FunctionalHelper, Db, Mailtrap]
+ ```  
+
+### Setup the configuration variables
+
+- The `client_id` token can be found on the page `https://mailtrap.io/public_api`
+- The `inbox_id` can be found in the url when visiting the website: *https://mailtrap.io/inboxes/`12345`/messages*.
+
+```yml
+modules:
+    enabled: [Filesystem, FunctionalHelper, Db, Mailtrap]
     config:
-        Laravel5:
-            cleanup: true
         Mailtrap:
             client_id: ADD_YOUR_TOKEN_HERE
             inbox_id: ADD_YOUR_INBOX_NAME_HERE
  ```     
-
-  You can find the token on the page https://mailtrap.io/public_api
-  The `inbox_id` can be found in the url when visiting the website: *https://mailtrap.io/inboxes/`12345`/messages*.
+ 
+Update Codeception build
   
-  After that you can run a build for Codeception to index your files properly and you're good to go.
+  ```bash
+  codecept build
+  ```
+
+You're all set up!
