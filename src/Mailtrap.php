@@ -72,8 +72,8 @@ class Mailtrap extends Module
      */
     public function _after(\Codeception\TestCase $test)
     {
-        if($this->config['cleanup']){
-            $this->cleanInbox();   
+        if ($this->config['cleanup']) {
+            $this->cleanInbox();
         }
     }
 
