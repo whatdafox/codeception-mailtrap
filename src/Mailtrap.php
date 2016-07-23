@@ -43,7 +43,7 @@ class Mailtrap extends Module
     /**
      * @var array
      */
-    protected $config = ['client_id' => null, 'inbox_id' => null];
+    protected $config = ['client_id' => null, 'inbox_id' => null, 'cleanup' => true];
 
     /**
      * @var array
@@ -72,7 +72,9 @@ class Mailtrap extends Module
      */
     public function _after(\Codeception\TestCase $test)
     {
-        $this->cleanInbox();
+        if($this->config['cleanup']){
+            $this->cleanInbox();   
+        }
     }
 
     /**
