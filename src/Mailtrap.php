@@ -115,7 +115,7 @@ class Mailtrap extends Module
 
         return array_shift($messages);
     }
-    
+
     /**
      * Gets the attachments on the last message.
      *
@@ -123,7 +123,7 @@ class Mailtrap extends Module
      */
     public function fetchAttachmentsOfLastMessage()
     {
-        $email    = $this->fetchLastMessage();
+        $email = $this->fetchLastMessage();
         $response = $this->client->get("inboxes/{$this->config['inbox_id']}/messages/{$email['id']}/attachments")->getBody();
 
         return json_decode($response, true);
@@ -245,9 +245,9 @@ class Mailtrap extends Module
         $email = $this->fetchLastMessage();
         $this->assertContains($expected, $email['html_body'], 'Email body contains HTML');
     }
-    
-       /**
-     * Look for an attachment on the most recent email
+
+    /**
+     * Look for an attachment on the most recent email.
      *
      * @param $count
      */
@@ -259,7 +259,7 @@ class Mailtrap extends Module
     }
 
     /**
-     * Look for an attachment on the most recent email
+     * Look for an attachment on the most recent email.
      *
      * @param $bool
      */
