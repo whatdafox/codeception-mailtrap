@@ -43,7 +43,7 @@ class Mailtrap extends Module
     /**
      * @var array
      */
-    protected $config = ['client_id' => null, 'inbox_id' => null];
+    protected $config = ['client_id' => null, 'inbox_id' => null, 'cleanup' => true];
 
     /**
      * @var array
@@ -72,7 +72,9 @@ class Mailtrap extends Module
      */
     public function _after(\Codeception\TestCase $test)
     {
-        $this->cleanInbox();
+        if ($this->config['cleanup']) {
+            $this->cleanInbox();
+        }
     }
 
     /**
@@ -112,6 +114,19 @@ class Mailtrap extends Module
         $messages = json_decode($messages, true);
 
         return array_shift($messages);
+    }
+
+    /**
+     * Gets the attachments on the last message.
+     *
+     * @return array
+     */
+    public function fetchAttachmentsOfLastMessage()
+    {
+        $email = $this->fetchLastMessage();
+        $response = $this->client->get("inboxes/{$this->config['inbox_id']}/messages/{$email['id']}/attachments")->getBody();
+
+        return json_decode($response, true);
     }
 
     /**
@@ -229,5 +244,29 @@ class Mailtrap extends Module
     {
         $email = $this->fetchLastMessage();
         $this->assertContains($expected, $email['html_body'], 'Email body contains HTML');
+    }
+
+    /**
+     * Look for an attachment on the most recent email.
+     *
+     * @param $count
+     */
+    public function seeAttachments($count)
+    {
+        $attachments = $this->fetchAttachmentsOfLastMessage();
+
+        $this->assertEquals($count, count($attachments));
+    }
+
+    /**
+     * Look for an attachment on the most recent email.
+     *
+     * @param $bool
+     */
+    public function seeAnAttachment($bool)
+    {
+        $attachments = $this->fetchAttachmentsOfLastMessage();
+
+        $this->assertEquals($bool, count($attachments) > 0);
     }
 }
