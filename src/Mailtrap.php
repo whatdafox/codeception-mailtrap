@@ -4,6 +4,7 @@ namespace Codeception\Module;
 
 use Codeception\Module;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Stream;
 
 /**
  * This module allows you to test emails using Mailtrap <https://mailtrap.io>.
@@ -23,6 +24,7 @@ use GuzzleHttp\Client;
  *
  * * client_id: `string`, default `` - Your mailtrap API key.
  * * inbox_id: `string`, default `` - The inbox ID to use for the tests
+ * * cleanup: `boolean`, default `true` - Clean the inbox after each scenario
  *
  * ## API
  *
@@ -111,6 +113,10 @@ class Mailtrap extends Module
     public function fetchLastMessage()
     {
         $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")->getBody();
+        if ($messages instanceof Stream) {
+            $messages = $messages->getContents();
+        }
+        
         $messages = json_decode($messages, true);
 
         return array_shift($messages);
