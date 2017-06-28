@@ -124,9 +124,10 @@ class Mailtrap extends Module
             do {
                 sleep(1);
                 $counter++;
-                echo "Counter = " . $counter . " : ";              
+                echo " Counter = " . $counter . " : ";              
                 $messages = $this->client->get("inboxes/$inboxID/messages?search=".$emailSearchForString)->getBody();
                 $messages = json_decode($messages, true);
+                
             } while ($counter < 60 && $messages == Null);
 
            
@@ -134,9 +135,10 @@ class Mailtrap extends Module
             do {
                 sleep(1);
                 $counter++;
-                echo "Counter = " . $counter;
+                echo " Counter = " . $counter . " : ";
                 $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages?search=".$emailSearchForString)->getBody();
                 $messages = json_decode($messages, true);
+
             } while ($counter < 60 && $messages == Null);
         }
         return array_shift($messages);
@@ -147,10 +149,13 @@ class Mailtrap extends Module
      *
      * @return array
      */
-    public function deleteMessage($messageID)
+    public function deleteMessage($messageID, $inboxID)
     {
-        $messages = $this->client->delete("inboxes/{$this->config['inbox_id']}/messages/".$messageID);
-       
+        if($inboxID != ''){
+            $messages = $this->client->delete("inboxes/$inboxID/messages/".$messageID);
+        } else {
+            $messages = $this->client->delete("inboxes/{$this->config['inbox_id']}/messages/".$messageID); 
+        }
     }
 
     public function fetchLastMessage()
