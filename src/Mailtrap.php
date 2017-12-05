@@ -127,7 +127,6 @@ class Mailtrap extends Module
                 echo " Counter = " . $counter . " : ";              
                 $messages = $this->client->get("inboxes/$inboxID/messages?search=".$emailSearchForString)->getBody();
                 $messages = json_decode($messages, true);
-                
             } while ($counter < 60 && $messages == Null);
 
            
@@ -135,14 +134,38 @@ class Mailtrap extends Module
             do {
                 sleep(1);
                 $counter++;
-                echo " Counter = " . $counter . " : ";
+                echo " Counter = " . $counter;
                 $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages?search=".$emailSearchForString)->getBody();
                 $messages = json_decode($messages, true);
-
             } while ($counter < 60 && $messages == Null);
         }
         return array_shift($messages);
     }
+
+    /**
+     * Gets the attachments on the last message.
+     *
+     * @return array
+     */
+    public function fetchAttachmentsOfLastMessage()
+    {
+        $email = $this->fetchLastMessage();
+        $response = $this->client->get("inboxes/{$this->config['inbox_id']}/messages/{$email['id']}/attachments")->getBody();
+        return json_decode($response, true);
+    }
+
+    public function fetchAttachmentsOfMessage($inboxID, $messageID)
+    {
+        if ($inboxID != ''){ // test sent a specific email box to search
+            $messages = $this->client->get("inboxes/$inboxID/messages/$messageID/attachments")->getBody();
+            $messages = json_decode($messages, true);           
+       } else { // Use the config email box
+            $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages/$messageID/attachments")->getBody();
+            $messages = json_decode($messages, true);
+        }
+        return array_shift($messages);
+    }
+
 
     /**
      * Delete a specific message from the inbox.  Must pass in the message ID to delete
@@ -165,6 +188,8 @@ class Mailtrap extends Module
 
         return array_shift($messages);
     }
+
+     
 
     /**
      * Check if the latest email received is from $senderEmail.
