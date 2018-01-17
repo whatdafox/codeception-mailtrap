@@ -275,4 +275,50 @@ class Mailtrap extends Module
 
         $this->assertEquals($bool, count($attachments) > 0);
     }
+
+    /**
+     * Get the most recent messages of the default inbox.
+     *
+     * @param int $number
+     *
+     * @return array
+     */
+    public function fetchLastMessages($number = 1)
+    {
+        $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")->getBody();
+        if ($messages instanceof Stream) {
+            $messages = $messages->getContents();
+        }
+
+        $messages = json_decode($messages, true);
+
+        $firstIndex = count($messages) - $number;
+
+        $messages = array_slice($messages, $firstIndex, $number);
+
+        $this->assertCount($number, $messages);
+
+        return $messages;
+    }
+
+    /**
+     * Get the bcc property of a message
+     *
+     * @param int $messageId
+     *
+     * @return string
+     */
+    public function getBccEmailOfMessage($messageId)
+    {
+        $message = $this->client->get("inboxes/{$this->config['inbox_id']}/messages/$messageId/body.eml")->getBody();
+        if ($message instanceof Stream) {
+            $message = $message->getContents();
+        }
+        $matches = [];
+        preg_match('/Bcc:\s[\w.-]+@[\w.-]+\.[a-z]{2,6}/', $message, $matches);
+
+        $bcc = substr(array_shift($matches),5);
+
+        return $bcc;
+    }
 }
