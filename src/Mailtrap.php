@@ -2,7 +2,6 @@
 
 namespace Codeception\Module;
 
-use Codeception\Module;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Stream;
 
@@ -61,7 +60,7 @@ class Mailtrap extends Module
     {
         $this->client = new Client([
             'base_uri' => $this->baseUrl,
-            'headers'  => [
+            'headers' => [
                 'Api-Token' => $this->config['client_id'],
             ],
         ]);
@@ -113,10 +112,11 @@ class Mailtrap extends Module
     public function fetchLastMessage()
     {
         $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")->getBody();
+
         if ($messages instanceof Stream) {
             $messages = $messages->getContents();
         }
-        
+
         $messages = json_decode($messages, true);
 
         return array_shift($messages);
@@ -260,7 +260,6 @@ class Mailtrap extends Module
     public function seeAttachments($count)
     {
         $attachments = $this->fetchAttachmentsOfLastMessage();
-
         $this->assertEquals($count, count($attachments));
     }
 
@@ -272,7 +271,6 @@ class Mailtrap extends Module
     public function seeAnAttachment($bool)
     {
         $attachments = $this->fetchAttachmentsOfLastMessage();
-
         $this->assertEquals($bool, count($attachments) > 0);
     }
 
@@ -286,6 +284,7 @@ class Mailtrap extends Module
     public function fetchLastMessages($number = 1)
     {
         $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")->getBody();
+
         if ($messages instanceof Stream) {
             $messages = $messages->getContents();
         }
@@ -311,13 +310,14 @@ class Mailtrap extends Module
     public function getBccEmailOfMessage($messageId)
     {
         $message = $this->client->get("inboxes/{$this->config['inbox_id']}/messages/$messageId/body.eml")->getBody();
+        
         if ($message instanceof Stream) {
             $message = $message->getContents();
         }
         $matches = [];
         preg_match('/Bcc:\s[\w.-]+@[\w.-]+\.[a-z]{2,6}/', $message, $matches);
 
-        $bcc = substr(array_shift($matches),5);
+        $bcc = substr(array_shift($matches), 5);
 
         return $bcc;
     }
