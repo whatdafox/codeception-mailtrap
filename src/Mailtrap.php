@@ -110,7 +110,7 @@ class Mailtrap extends Module
      *
      * @return array
      */
-    public function fetchLastMessage()
+    public function fetchMessages()
     {
         $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")->getBody();
 
@@ -119,6 +119,18 @@ class Mailtrap extends Module
         }
 
         $messages = json_decode($messages, true);
+
+        return $messages;
+    }
+
+    /**
+     * Get the most recent message of the default inbox.
+     *
+     * @return array
+     */
+    public function fetchLastMessage()
+    {
+        $messages = $this->fetchMessages();
 
         return array_shift($messages);
     }
