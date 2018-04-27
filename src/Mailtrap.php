@@ -5,8 +5,7 @@ namespace Codeception\Module;
 use Codeception\Module;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Stream;
-use PHPUnit_Framework_Constraint_IsEqual;
-use PHPUnit_Framework_Constraint_StringContains;
+use PHPUnit\Framework\Assert;
 
 /**
  * This module allows you to test emails using Mailtrap <https://mailtrap.io>.
@@ -380,7 +379,7 @@ class Mailtrap extends Module
         $condition = function () use ($subject) {
             $emails = $this->fetchMessages();
             foreach ($emails as $email) {
-                $constraint = new PHPUnit_Framework_Constraint_IsEqual($subject);
+                $constraint = Assert::equalTo($subject);
                 if ($constraint->evaluate($email['subject'], '', true)) {
                     return true;
                 }
@@ -407,7 +406,7 @@ class Mailtrap extends Module
         $condition = function () use ($text) {
             $emails = $this->fetchMessages();
             foreach ($emails as $email) {
-                $constraint = new PHPUnit_Framework_Constraint_StringContains($text);
+                $constraint = Assert::stringContains($text);
                 if ($constraint->evaluate($email['text_body'], '', true)) {
                     return true;
                 }
@@ -434,7 +433,7 @@ class Mailtrap extends Module
         $condition = function () use ($text) {
             $emails = $this->fetchMessages();
             foreach ($emails as $email) {
-                $constraint = new PHPUnit_Framework_Constraint_StringContains($text);
+                $constraint = Assert::stringContains($text);
                 if ($constraint->evaluate($email['html_body'], '', true)) {
                     return true;
                 }
