@@ -252,6 +252,19 @@ class Mailtrap extends Module
         $this->assertContains($expected, $email['html_body'], 'Email body contains HTML');
     }
 
+	/**
+	 * Look for a string in the most recent email subject.
+	 *
+	 * @param string $expected
+	 *
+	 * @return mixed
+	 */
+	public function seeInEmailSubject($expected)
+	{
+		$email = $this->fetchLastMessage();
+		$this->assertContains($expected, $email['subject'], 'Email subject contains text');
+	}
+
     /**
      * Look for an attachment on the most recent email.
      *
