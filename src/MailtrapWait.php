@@ -21,6 +21,13 @@ class MailtrapWait
 	 */
 	protected $interval;
 
+	/**
+	 * MailtrapWait constructor.
+	 *
+	 * @param Mailtrap $mailtrap
+	 * @param null|int $timeout_in_second
+	 * @param null|int $interval_in_millisecond
+	 */
 	public function __construct(Mailtrap $mailtrap, $timeout_in_second = null, $interval_in_millisecond = null)
 	{
 		$this->mailtrap = $mailtrap;
