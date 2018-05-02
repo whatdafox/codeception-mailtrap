@@ -38,20 +38,20 @@ class MailtrapWait
 	/**
 	 * Calls the function provided with the driver as an argument until the return value is not falsey.
 	 *
-	 * @param callable $func_or_ec
+	 * @param callable $function
 	 * @param string $message
 	 *
 	 * @throws \Exception
-	 * @return mixed The return value of $func_or_ec
+	 * @return mixed The return value of $function
 	 */
-	public function until($func_or_ec, $message = '')
+	public function until($function, $message = '')
 	{
 		$end = microtime(true) + $this->timeout;
 		$last_exception = null;
 
 		while ( $end > microtime( true ) ) {
 			try {
-				$ret_val = call_user_func( $func_or_ec, $this->mailtrap );
+				$ret_val = call_user_func( $function, $this->mailtrap );
 				if ( $ret_val ) {
 					return $ret_val;
 				}
