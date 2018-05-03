@@ -2,7 +2,6 @@
 
 namespace Codeception\Module;
 
-use Codeception\Module;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Stream;
 use PHPUnit\Framework\Assert;
