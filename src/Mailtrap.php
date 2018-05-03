@@ -5,6 +5,7 @@ namespace Codeception\Module;
 use Codeception\Module;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Stream;
+use PHPUnit\Framework\Assert;
 
 /**
  * This module allows you to test emails using Mailtrap <https://mailtrap.io>.
@@ -110,7 +111,7 @@ class Mailtrap extends Module
      *
      * @return array
      */
-    public function fetchLastMessage()
+    public function fetchMessages()
     {
         $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")->getBody();
 
@@ -119,6 +120,18 @@ class Mailtrap extends Module
         }
 
         $messages = json_decode($messages, true);
+
+        return $messages;
+    }
+
+    /**
+     * Get the most recent message of the default inbox.
+     *
+     * @return array
+     */
+    public function fetchLastMessage()
+    {
+        $messages = $this->fetchMessages();
 
         return array_shift($messages);
     }
@@ -334,5 +347,116 @@ class Mailtrap extends Module
         $bcc = substr(array_shift($matches), 5);
 
         return $bcc;
+    }
+
+    /**
+     *
+     * @param int $timeout_in_second
+     * @param int $interval_in_millisecond
+     *
+     * @return MailtrapWait
+     */
+    protected function wait($timeout_in_second = 30, $interval_in_millisecond = 250)
+    {
+        return new MailtrapWait($this, $timeout_in_second, $interval_in_millisecond);
+    }
+
+    /**
+     * Wait until an email to be received.
+     *
+     * @param int $timeout
+     *
+     * @throws \Exception
+     */
+    public function waitForEmail($timeout = 5)
+    {
+        $condition = function () {
+            return ! empty($this->fetchLastMessage());
+        };
+
+        $message = sprintf('Waited for %d secs but no email has arrived', $timeout);
+
+        $this->wait($timeout)->until($condition, $message);
+    }
+
+    /**
+     * Wait until an email has been received with specific text in the text body.
+     *
+     * @param string $subject
+     * @param int    $timeout
+     *
+     * @throws \Exception
+     */
+    public function waitForEmailWithSubject($subject, $timeout = 5)
+    {
+        $condition = function () use ($subject) {
+            $emails = $this->fetchMessages();
+            foreach ($emails as $email) {
+                $constraint = Assert::equalTo($subject);
+                if ($constraint->evaluate($email['subject'], '', true)) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+        $message = sprintf('Waited for %d secs but no email with the subject of %s has arrived', $timeout, $subject);
+
+        $this->wait($timeout)->until($condition, $message);
+    }
+
+    /**
+     * Wait until an email has been received with specific text in the text body.
+     *
+     * @param string $text
+     * @param int    $timeout
+     *
+     * @throws \Exception
+     */
+    public function waitForEmailWithTextInTextBody($text, $timeout = 5)
+    {
+        $condition = function () use ($text) {
+            $emails = $this->fetchMessages();
+            foreach ($emails as $email) {
+                $constraint = Assert::stringContains($text);
+                if ($constraint->evaluate($email['text_body'], '', true)) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+        $message = sprintf('Waited for %d secs but no email with the text body containing %s has arrived', $timeout, $text);
+
+        $this->wait($timeout)->until($condition, $message);
+    }
+
+    /**
+     * Wait until an email has been received with specific text in the text body.
+     *
+     * @param string $text
+     * @param int    $timeout
+     *
+     * @throws \Exception
+     */
+    public function waitForEmailWithTextInHTMLBody($text, $timeout = 5)
+    {
+        $condition = function () use ($text) {
+            $emails = $this->fetchMessages();
+            foreach ($emails as $email) {
+                $constraint = Assert::stringContains($text);
+                if ($constraint->evaluate($email['html_body'], '', true)) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
+        $message = sprintf('Waited for %d secs but no email with the html body containing %s has arrived', $timeout, $text);
+
+        $this->wait($timeout)->until($condition, $message);
     }
 }
