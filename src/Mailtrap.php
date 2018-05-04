@@ -125,6 +125,26 @@ class Mailtrap extends Module
     }
 
     /**
+     * Get the most recent messages of the default inbox.
+     *
+     * @param int $number
+     *
+     * @return array
+     */
+    public function fetchLastMessages($number = 1)
+    {
+        $messages = $this->fetchMessages();
+
+        $firstIndex = count($messages) - $number;
+
+        $messages = array_slice($messages, $firstIndex, $number);
+
+        $this->assertCount($number, $messages);
+
+        return $messages;
+    }
+
+    /**
      * Get the most recent message of the default inbox.
      *
      * @return array
@@ -299,26 +319,6 @@ class Mailtrap extends Module
     {
         $attachments = $this->fetchAttachmentsOfLastMessage();
         $this->assertEquals($bool, count($attachments) > 0);
-    }
-
-    /**
-     * Get the most recent messages of the default inbox.
-     *
-     * @param int $number
-     *
-     * @return array
-     */
-    public function fetchLastMessages($number = 1)
-    {
-        $messages = $this->fetchMessages();
-
-        $firstIndex = count($messages) - $number;
-
-        $messages = array_slice($messages, $firstIndex, $number);
-
-        $this->assertCount($number, $messages);
-
-        return $messages;
     }
 
     /**
