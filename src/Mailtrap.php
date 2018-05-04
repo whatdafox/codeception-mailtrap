@@ -310,13 +310,7 @@ class Mailtrap extends Module
      */
     public function fetchLastMessages($number = 1)
     {
-        $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")->getBody();
-
-        if ($messages instanceof Stream) {
-            $messages = $messages->getContents();
-        }
-
-        $messages = json_decode($messages, true);
+        $messages = $this->fetchMessages();
 
         $firstIndex = count($messages) - $number;
 
