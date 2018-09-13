@@ -121,9 +121,9 @@ class Mailtrap extends Module
 
         $messages = json_decode($messages, true);
 
-        foreach ($messages as $key => $message) {
-            $messages[$key] = new MailtrapMessage($messages);
-        }
+	    foreach ( $messages as $key => $message ) {
+		    $messages[ $key ] = new MailtrapMessage( $message, $this->client );
+	    }
 
         return $messages;
     }
