@@ -2,6 +2,7 @@
 
 namespace Codeception\Module;
 
+use Codeception\Module;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Stream;
 use PHPUnit\Framework\Assert;
@@ -101,7 +102,7 @@ class Mailtrap extends Module
         $message = $this->fetchLastMessage();
 
         foreach ($params as $param => $value) {
-            $this->assertEquals($value, $message[$param]);
+            $this->assertEquals($value, $message->{$param});
         }
     }
 
@@ -120,13 +121,37 @@ class Mailtrap extends Module
 
         $messages = json_decode($messages, true);
 
+	    foreach ( $messages as $key => $message ) {
+		    $messages[ $key ] = new MailtrapMessage( $message, $this->client );
+	    }
+
+        return $messages;
+    }
+
+    /**
+     * Get the most recent messages of the default inbox.
+     *
+     * @param int $number
+     *
+     * @return array
+     */
+    public function fetchLastMessages($number = 1)
+    {
+        $messages = $this->fetchMessages();
+
+        $firstIndex = count($messages) - $number;
+
+        $messages = array_slice($messages, $firstIndex, $number);
+
+        $this->assertCount($number, $messages);
+
         return $messages;
     }
 
     /**
      * Get the most recent message of the default inbox.
      *
-     * @return array
+     * @return MailtrapMessage
      */
     public function fetchLastMessage()
     {
@@ -143,7 +168,7 @@ class Mailtrap extends Module
     public function fetchAttachmentsOfLastMessage()
     {
         $email = $this->fetchLastMessage();
-        $response = $this->client->get("inboxes/{$this->config['inbox_id']}/messages/{$email['id']}/attachments")->getBody();
+        $response = $this->client->get("inboxes/{$this->config['inbox_id']}/messages/{$email->id}/attachments")->getBody();
 
         return json_decode($response, true);
     }
@@ -158,7 +183,7 @@ class Mailtrap extends Module
     public function receiveAnEmailFromEmail($senderEmail)
     {
         $message = $this->fetchLastMessage();
-        $this->assertEquals($senderEmail, $message['from_email']);
+        $this->assertEquals($senderEmail, $message->from_email);
     }
 
     /**
@@ -171,7 +196,7 @@ class Mailtrap extends Module
     public function receiveAnEmailFromName($senderName)
     {
         $message = $this->fetchLastMessage();
-        $this->assertEquals($senderName, $message['from_name']);
+        $this->assertEquals($senderName, $message->from_name);
     }
 
     /**
@@ -184,7 +209,7 @@ class Mailtrap extends Module
     public function receiveAnEmailToEmail($recipientEmail)
     {
         $message = $this->fetchLastMessage();
-        $this->assertEquals($recipientEmail, $message['to_email']);
+        $this->assertEquals($recipientEmail, $message->to_email);
     }
 
     /**
@@ -197,7 +222,7 @@ class Mailtrap extends Module
     public function receiveAnEmailToName($recipientName)
     {
         $message = $this->fetchLastMessage();
-        $this->assertEquals($recipientName, $message['to_name']);
+        $this->assertEquals($recipientName, $message->to_name);
     }
 
     /**
@@ -210,7 +235,7 @@ class Mailtrap extends Module
     public function receiveAnEmailWithSubject($subject)
     {
         $message = $this->fetchLastMessage();
-        $this->assertEquals($subject, $message['subject']);
+        $this->assertEquals($subject, $message->subject);
     }
 
     /**
@@ -223,7 +248,7 @@ class Mailtrap extends Module
     public function receiveAnEmailWithTextBody($textBody)
     {
         $message = $this->fetchLastMessage();
-        $this->assertEquals($textBody, $message['text_body']);
+        $this->assertEquals($textBody, $message->text_body);
     }
 
     /**
@@ -236,7 +261,7 @@ class Mailtrap extends Module
     public function receiveAnEmailWithHtmlBody($htmlBody)
     {
         $message = $this->fetchLastMessage();
-        $this->assertEquals($htmlBody, $message['html_body']);
+        $this->assertEquals($htmlBody, $message->html_body);
     }
 
     /**
@@ -249,7 +274,7 @@ class Mailtrap extends Module
     public function seeInEmailTextBody($expected)
     {
         $email = $this->fetchLastMessage();
-        $this->assertContains($expected, $email['text_body'], 'Email body contains text');
+        $this->assertContains($expected, $email->text_body, 'Email body contains text');
     }
 
     /**
@@ -262,7 +287,7 @@ class Mailtrap extends Module
     public function seeInEmailHtmlBody($expected)
     {
         $email = $this->fetchLastMessage();
-        $this->assertContains($expected, $email['html_body'], 'Email body contains HTML');
+        $this->assertContains($expected, $email->html_body, 'Email body contains HTML');
     }
 
 	/**
@@ -275,7 +300,7 @@ class Mailtrap extends Module
 	public function seeInEmailSubject($expected)
 	{
 		$email = $this->fetchLastMessage();
-		$this->assertContains($expected, $email['subject'], 'Email subject contains text');
+		$this->assertContains($expected, $email->subject, 'Email subject contains text');
 	}
 
     /**
@@ -298,32 +323,6 @@ class Mailtrap extends Module
     {
         $attachments = $this->fetchAttachmentsOfLastMessage();
         $this->assertEquals($bool, count($attachments) > 0);
-    }
-
-    /**
-     * Get the most recent messages of the default inbox.
-     *
-     * @param int $number
-     *
-     * @return array
-     */
-    public function fetchLastMessages($number = 1)
-    {
-        $messages = $this->client->get("inboxes/{$this->config['inbox_id']}/messages")->getBody();
-
-        if ($messages instanceof Stream) {
-            $messages = $messages->getContents();
-        }
-
-        $messages = json_decode($messages, true);
-
-        $firstIndex = count($messages) - $number;
-
-        $messages = array_slice($messages, $firstIndex, $number);
-
-        $this->assertCount($number, $messages);
-
-        return $messages;
     }
 
     /**
@@ -392,7 +391,7 @@ class Mailtrap extends Module
             $emails = $this->fetchMessages();
             foreach ($emails as $email) {
                 $constraint = Assert::equalTo($subject);
-                if ($constraint->evaluate($email['subject'], '', true)) {
+                if ($constraint->evaluate($email->subject, '', true)) {
                     return true;
                 }
             }
@@ -419,7 +418,7 @@ class Mailtrap extends Module
             $emails = $this->fetchMessages();
             foreach ($emails as $email) {
                 $constraint = Assert::stringContains($text);
-                if ($constraint->evaluate($email['text_body'], '', true)) {
+                if ($constraint->evaluate($email->text_body, '', true)) {
                     return true;
                 }
             }
@@ -446,7 +445,7 @@ class Mailtrap extends Module
             $emails = $this->fetchMessages();
             foreach ($emails as $email) {
                 $constraint = Assert::stringContains($text);
-                if ($constraint->evaluate($email['html_body'], '', true)) {
+                if ($constraint->evaluate($email->html_body, '', true)) {
                     return true;
                 }
             }
