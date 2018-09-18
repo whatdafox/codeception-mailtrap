@@ -31,22 +31,22 @@ class MailtrapWait
     public function __construct(Mailtrap $mailtrap, $timeout_in_second = null, $interval_in_millisecond = null)
     {
         $this->mailtrap = $mailtrap;
-        $this->timeout  = isset($timeout_in_second) ? $timeout_in_second : 30;
-        $this->interval = $interval_in_millisecond ? : 250;
+        $this->timeout = isset($timeout_in_second) ? $timeout_in_second : 30;
+        $this->interval = $interval_in_millisecond ?: 250;
     }
 
     /**
      * Calls the function provided with the driver as an argument until the return value is not falsey.
      *
      * @param callable $function
-     * @param string   $message
+     * @param string $message
      *
      * @throws \Exception
      * @return mixed The return value of $function
      */
     public function until($function, $message = '')
     {
-        $end            = microtime(true) + $this->timeout;
+        $end = microtime(true) + $this->timeout;
         $last_exception = null;
 
         while ($end > microtime(true)) {
