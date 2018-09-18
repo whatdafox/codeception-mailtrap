@@ -121,9 +121,9 @@ class Mailtrap extends Module
 
         $messages = json_decode($messages, true);
 
-	    foreach ( $messages as $key => $message ) {
-		    $messages[ $key ] = new MailtrapMessage( $message, $this->client );
-	    }
+        foreach ($messages as $key => $message) {
+            $messages[$key] = new MailtrapMessage($message, $this->client);
+        }
 
         return $messages;
     }
@@ -290,18 +290,18 @@ class Mailtrap extends Module
         $this->assertContains($expected, $email->html_body, 'Email body contains HTML');
     }
 
-	/**
-	 * Look for a string in the most recent email subject.
-	 *
-	 * @param string $expected
-	 *
-	 * @return mixed
-	 */
-	public function seeInEmailSubject($expected)
-	{
-		$email = $this->fetchLastMessage();
-		$this->assertContains($expected, $email->subject, 'Email subject contains text');
-	}
+    /**
+     * Look for a string in the most recent email subject.
+     *
+     * @param string $expected
+     *
+     * @return mixed
+     */
+    public function seeInEmailSubject($expected)
+    {
+        $email = $this->fetchLastMessage();
+        $this->assertContains($expected, $email->subject, 'Email subject contains text');
+    }
 
     /**
      * Look for an attachment on the most recent email.
@@ -335,7 +335,7 @@ class Mailtrap extends Module
     public function getBccEmailOfMessage($messageId)
     {
         $message = $this->client->get("inboxes/{$this->config['inbox_id']}/messages/$messageId/body.eml")->getBody();
-        
+
         if ($message instanceof Stream) {
             $message = $message->getContents();
         }
@@ -369,7 +369,7 @@ class Mailtrap extends Module
     public function waitForEmail($timeout = 5)
     {
         $condition = function () {
-            return ! empty($this->fetchLastMessage());
+            return !empty($this->fetchLastMessage());
         };
 
         $message = sprintf('Waited for %d secs but no email has arrived', $timeout);
@@ -381,7 +381,7 @@ class Mailtrap extends Module
      * Wait until an email has been received with specific text in the text body.
      *
      * @param string $subject
-     * @param int    $timeout
+     * @param int $timeout
      *
      * @throws \Exception
      */
@@ -408,7 +408,7 @@ class Mailtrap extends Module
      * Wait until an email has been received with specific text in the text body.
      *
      * @param string $text
-     * @param int    $timeout
+     * @param int $timeout
      *
      * @throws \Exception
      */
@@ -426,7 +426,8 @@ class Mailtrap extends Module
             return false;
         };
 
-        $message = sprintf('Waited for %d secs but no email with the text body containing %s has arrived', $timeout, $text);
+        $message = sprintf('Waited for %d secs but no email with the text body containing %s has arrived', $timeout,
+            $text);
 
         $this->wait($timeout)->until($condition, $message);
     }
@@ -435,7 +436,7 @@ class Mailtrap extends Module
      * Wait until an email has been received with specific text in the text body.
      *
      * @param string $text
-     * @param int    $timeout
+     * @param int $timeout
      *
      * @throws \Exception
      */
@@ -453,7 +454,8 @@ class Mailtrap extends Module
             return false;
         };
 
-        $message = sprintf('Waited for %d secs but no email with the html body containing %s has arrived', $timeout, $text);
+        $message = sprintf('Waited for %d secs but no email with the html body containing %s has arrived', $timeout,
+            $text);
 
         $this->wait($timeout)->until($condition, $message);
     }
