@@ -75,7 +75,7 @@ class MailtrapMessage
             return $this->{$key};
         }
 
-        $data_key = str_replace('body', 'path', $key);
+        $data_key = str_replace(['text_body', 'html_body'], ['txt_path', 'html_path'], $key);
 
         $data = $this->retrieveMessageData($data_key);
 
