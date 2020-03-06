@@ -29,7 +29,7 @@ modules:
 
 ### Setup the configuration variables
 
-- The `client_id` token can be found on the page `https://mailtrap.io/public_api`
+- The `client_id` token can be found on the page `https://mailtrap.io/public-api`
 - The `inbox_id` can be found in the url when visiting the website: *https://mailtrap.io/inboxes/`12345`/messages*.
 
 ```yml
